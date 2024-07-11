@@ -1,0 +1,38 @@
+---
+- name: Create Traefik data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ traefik.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Create Traefik ACME storage.
+  become: true
+  ansible.builtin.file:
+    path: "{{ traefik.datadir }}/acme.json"
+    state: touch
+    mode: "600"
+    modification_time: preserve
+    access_time: preserve
+
+- name: Transfer Traefik template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/traefik/{{ item.src }}"
+    dest: "{{ traefik.datadir }}/{{ item.dest }}"
+    mode: "640"
+  loop:
+    - src: docker-compose.yml.j2
+      dest: docker-compose.yml
+    - src: traefik.yml.j2
+      dest: traefik.yml
+    - src: config.yml.j2
+      dest: config.yml
+  notify: Restart Traefik
+
+- name: Ensure Traefik is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ traefik.datadir }}"
+    state: present
+  register: traefik_running

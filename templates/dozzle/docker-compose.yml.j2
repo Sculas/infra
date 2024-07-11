@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+networks:
+  {{ docker_network }}:
+    external: true
+
+services:
+  dozzle:
+    container_name: dozzle
+    image: {{ dozzle.image }}
+    restart: unless-stopped
+    hostname: "{{ dozzle.hostname }}"
+    networks:
+      - {{ docker_network }}
+    environment:
+      TZ: "{{ docker_tz }}"
+      DOZZLE_ENABLE_ACTIONS: "true"
+      DOZZLE_NO_ANALYTICS: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dozzle.rule: "Host(`{{ dozzle.hostname }}`)"
+      traefik.http.services.dozzle.loadbalancer.server.port: "8080"

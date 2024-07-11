@@ -1,0 +1,36 @@
+---
+- name: "Running playbook"
+  hosts: all
+  serial: 1
+
+  roles:
+    - role: mitre.yedit
+
+  vars_files:
+    - vars/all/config.yml
+    - vars/all/vault.yml
+
+  pre_tasks:
+    - name: Check if user mode works.
+      become: false
+      ansible.builtin.debug:
+        msg: "user mode ok"
+
+    - name: Check if become mode works.
+      become: true
+      ansible.builtin.debug:
+        msg: "become mode ok"
+
+  handlers:
+    - name: Include handlers.
+      ansible.builtin.import_tasks: tasks/handlers.yml
+
+  tasks:
+    - name: Configure Docker.
+      ansible.builtin.import_tasks: tasks/docker.yml
+    - name: Set up Traefik.
+      ansible.builtin.import_tasks: tasks/traefikproxy.yml
+    - name: Set up AdGuard Home.
+      ansible.builtin.import_tasks: tasks/adguardhome.yml
+    - name: Set up Dozzle.
+      ansible.builtin.import_tasks: tasks/dozzle.yml

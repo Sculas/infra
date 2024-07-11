@@ -1,0 +1,22 @@
+---
+- name: Check if Docker is present.
+  ansible.builtin.command: which docker
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: docker_command_result
+
+- name: Return an error and end the play if Docker is missing.
+  when: docker_command_result.rc == 1
+  block:
+    - name: Docker must be configured manually on TrueNAS.
+      ansible.builtin.debug:
+        msg: Docker seems to be missing. Please check your configuration and read the usage for more information.
+    - name: End play.
+      ansible.builtin.meta: end_play
+
+- name: Create the Docker network.
+  community.docker.docker_network:
+    name: "{{ docker_network }}"
+    state: present
+    driver: bridge

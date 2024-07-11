@@ -1,0 +1,44 @@
+# {{ ansible_managed }}
+---
+http:
+  routers:
+    truenas:
+      rule: "Host(`{{ truenas.hostname }}`)"
+      service: truenas
+
+  services:
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:{{ truenas.webui_port }}"
+        passHostHeader: true
+
+  middlewares:
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipAllowList:
+        sourceRange:
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+
+tls:
+  options:
+    default:
+      sniStrict: true

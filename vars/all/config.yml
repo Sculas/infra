@@ -1,0 +1,39 @@
+---
+# Docker configuration
+docker_tz: Europe/Amsterdam
+docker_network: homelab
+
+# Mounting points
+mounts:
+  storage: &storage "/mnt/bakkie-nasi"
+  appdata: "/mnt/bakkie-bami"
+  media:
+    - *storage
+    - "/Muziek"
+  download:
+    - *storage
+    - "/Download"
+
+# TrueNAS configuration
+truenas:
+  hostname: "truenas.{{ internal_hostname }}"
+  webui_port: "81"
+
+# AdGuard Home configuration
+adguardhome:
+  image: adguard/adguardhome:latest
+  hostname: "adguard.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/adguardhome"
+  dashboard_port: "10000"
+
+# Traefik configuration
+traefik:
+  image: traefik:v3.0
+  hostname: "traefik.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/traefik"
+
+# Dozzle configuration
+dozzle:
+  image: amir20/dozzle:latest
+  hostname: "docker.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/dozzle"

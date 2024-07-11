@@ -1,0 +1,30 @@
+---
+# Traefik must ALWAYS be first! Otherwise services might not work.
+- name: Restart Traefik
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ traefik.datadir }}"
+    state: present
+    restarted: true
+  when: not traefik_running.changed
+
+# ----------------------------------------------------------------------
+
+- name: Restart Dozzle
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ dozzle.datadir }}"
+    state: present
+    restarted: true
+  when: not dozzle_running.changed
+
+# ----------------------------------------------------------------------
+
+# AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.
+- name: Restart AdGuard Home
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ adguardhome.datadir }}"
+    state: present
+    restarted: true
+  when: not adguardhome_running.changed

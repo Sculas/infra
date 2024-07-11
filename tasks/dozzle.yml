@@ -1,0 +1,22 @@
+---
+- name: Create Dozzle data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ dozzle.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Dozzle template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/dozzle/docker-compose.yml.j2"
+    dest: "{{ dozzle.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Dozzle
+
+- name: Ensure Dozzle is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ dozzle.datadir }}"
+    state: present
+  register: dozzle_running

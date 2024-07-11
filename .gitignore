@@ -1,0 +1,5 @@
+__pycache__/
+*.retry
+node_modules
+
+.vault_password

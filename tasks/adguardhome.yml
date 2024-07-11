@@ -1,0 +1,46 @@
+---
+- name: Create AdGuard Home data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ adguardhome.datadir }}/{{ item }}"
+    state: directory
+    mode: "755"
+  loop:
+    - work
+    - conf
+
+- name: Transfer AdGuard Home docker-compose template.
+  become: true
+  ansible.builtin.template:
+    src: "templates/adguardhome/docker-compose.yml.j2"
+    dest: "{{ adguardhome.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart AdGuard Home
+
+# Ensure the file exists first, so we can modify it in the next step.
+- name: Create AdGuard Home config file.
+  become: true
+  ansible.builtin.file:
+    path: "{{ adguardhome.datadir }}/conf/AdGuardHome.yaml"
+    state: touch
+    mode: "640"
+    modification_time: preserve
+    access_time: preserve
+
+- name: Configure AdGuard Home.
+  become: true
+  yedit:
+    src: "{{ adguardhome.datadir }}/conf/AdGuardHome.yaml"
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  notify: Restart AdGuard Home
+  loop: "{{ adguardhome_config | nested_dict_to_items }}"
+  vars:
+    adguardhome_config: "{{ lookup('ansible.builtin.template', 'templates/adguardhome/AdGuardHome.yaml.j2') | from_yaml }}"
+
+- name: Ensure AdGuard Home is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ adguardhome.datadir }}"
+    state: present
+  register: adguardhome_running
