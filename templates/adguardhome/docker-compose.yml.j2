@@ -22,9 +22,9 @@ services:
     environment:
       TZ: "{{ docker_tz }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - {{ adguardhome.datadir }}/work:/opt/adguardhome/work
-      - {{ adguardhome.datadir }}/conf:/opt/adguardhome/conf
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ adguardhome.datadir }}/work:/opt/adguardhome/work"
+      - "{{ adguardhome.datadir }}/conf:/opt/adguardhome/conf"
     dns:
       - 127.0.0.1
       - 1.1.1.1

@@ -23,9 +23,9 @@ services:
     environment:
       TZ: "{{ docker_tz }}"
     volumes:
-      - {{ jellyfin.datadir }}/config:/config
-      - {{ jellyfin.datadir }}/cache:/cache
-      - {{ jellyfin.mediadir }}:/media
+      - "{{ jellyfin.datadir }}/config:/config"
+      - "{{ jellyfin.datadir }}/cache:/cache"
+      - "{{ jellyfin.mediadir }}:/media"
     labels:
       traefik.enable: "true"
       traefik.http.routers.jellyfin.entrypoints: "https-external"

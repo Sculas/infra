@@ -35,11 +35,11 @@ services:
       # User API token with Zone:Read and DNS:Edit permissions
       CF_DNS_API_TOKEN: "{{ cloudflare_dns_token }}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - {{ traefik.datadir }}/traefik.yml:/traefik.yml:ro
-      - {{ traefik.datadir }}/config.yml:/config.yml:ro
-      - {{ traefik.datadir }}/acme.json:/acme.json
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "{{ traefik.datadir }}/traefik.yml:/traefik.yml:ro"
+      - "{{ traefik.datadir }}/config.yml:/config.yml:ro"
+      - "{{ traefik.datadir }}/acme.json:/acme.json"
     labels:
       traefik.enable: "true"
       # Dashboard configuration
@@ -48,5 +48,5 @@ services:
       traefik.http.routers.traefik-dashboard.service: "api@internal"
       # Require authentication for dashboard access
       traefik.http.routers.traefik-dashboard.middlewares: "traefik-auth,secured@file"
-      # Replace $ with $$ to escape string interpolation
-      traefik.http.middlewares.traefik-auth.basicauth.users: "{{ traefik_dashboard_user }}:{{ traefik_dashboard_pass | regex_replace('\$', '$$') }}"
+      # Replace $ with $$ to escape string interpolation in Docker
+      traefik.http.middlewares.traefik-auth.basicauth.users: "{{ traefik_dashboard_user }}:{{ traefik_dashboard_pass | regex_replace('[$]', '$$') }}"
