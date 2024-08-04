@@ -26,6 +26,14 @@
     restarted: true
   when: not jellyfin_running.changed
 
+- name: Restart Sonarr
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ sonarr.datadir }}"
+    state: present
+    restarted: true
+  when: not sonarr_running.changed
+
 # ----------------------------------------------------------------------
 
 # AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.

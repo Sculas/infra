@@ -7,6 +7,7 @@ docker_network: homelab
 mounts:
   storage: "/mnt/bakkie-nasi"
   appdata: "/mnt/bakkie-bami"
+  media: "/mnt/bakkie-nasi/Muziek"
 
 # TrueNAS configuration
 truenas:
@@ -33,4 +34,10 @@ dozzle:
 jellyfin:
   hostname: "jf.{{ external_hostname }}"
   datadir: "{{ mounts.appdata }}/jellyfin"
-  mediadir: "{{ mounts.storage }}/Muziek"
+  mediadir: "{{ mounts.media }}"
+
+# Sonarr configuration
+sonarr:
+  hostname: "sonarr.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/sonarr"
+  mediadir: "{{ mounts.media }}"

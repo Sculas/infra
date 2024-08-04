@@ -1,0 +1,22 @@
+---
+- name: Create Sonarr data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ sonarr.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Sonarr template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/sonarr/docker-compose.yml.j2"
+    dest: "{{ sonarr.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Sonarr
+
+- name: Ensure Sonarr is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ sonarr.datadir }}"
+    state: present
+  register: sonarr_running

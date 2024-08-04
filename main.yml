@@ -38,3 +38,5 @@
       ansible.builtin.import_tasks: tasks/dozzle.yml
     - name: Set up Jellyfin.
       ansible.builtin.import_tasks: tasks/jellyfin.yml
+    - name: Set up Sonarr.
+      ansible.builtin.import_tasks: tasks/sonarr.yml
