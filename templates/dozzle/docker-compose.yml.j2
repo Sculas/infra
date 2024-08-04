@@ -9,7 +9,7 @@ networks:
 services:
   dozzle:
     container_name: dozzle
-    image: {{ dozzle.image }}
+    image: amir20/dozzle:latest@sha256:6bed0dfc82484bda7a0a7347cfe7060c537d383c5263bbc8353a5c28de2e9bc0
     restart: unless-stopped
     hostname: "{{ dozzle.hostname }}"
     networks:

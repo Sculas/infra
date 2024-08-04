@@ -15,26 +15,22 @@ truenas:
 
 # AdGuard Home configuration
 adguardhome:
-  image: adguard/adguardhome:latest
   hostname: "adguard.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/adguardhome"
   dashboard_port: "10000"
 
 # Traefik configuration
 traefik:
-  image: traefik:v3.0
   hostname: "traefik.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/traefik"
 
 # Dozzle configuration
 dozzle:
-  image: amir20/dozzle:latest
   hostname: "docker.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/dozzle"
 
 # Jellyfin configuration
 jellyfin:
-  image: jellyfin/jellyfin:latest
   hostname: "jf.{{ external_hostname }}"
   datadir: "{{ mounts.appdata }}/jellyfin"
   mediadir: "{{ mounts.storage }}/Muziek"
