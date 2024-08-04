@@ -17,18 +17,23 @@ services:
     networks:
       - {{ docker_network }}
     ports:
+      # Internal endpoints
       - "80:80"
       - "443:443/tcp"
       - "443:443/udp"
+      # External endpoints
+      - "8080:8080"
+      - "8443:8443/tcp"
+      - "8443:8443/udp"
     # This is so Traefik can proxy the TrueNAS Web UI
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
       TZ: "{{ docker_tz }}"
       # Email of your Cloudflare account
-      CF_API_EMAIL: "{{ traefik_acme_cf_dns_email }}"
+      CF_API_EMAIL: "{{ cloudflare_email }}"
       # User API token with Zone:Read and DNS:Edit permissions
-      CF_DNS_API_TOKEN: "{{ traefik_acme_cf_dns_token }}"
+      CF_DNS_API_TOKEN: "{{ cloudflare_dns_token }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -38,6 +43,7 @@ services:
     labels:
       traefik.enable: "true"
       # Dashboard configuration
+      traefik.http.routers.traefik-dashboard.entrypoints: "https"
       traefik.http.routers.traefik-dashboard.rule: "Host(`{{ traefik.hostname }}`)"
       traefik.http.routers.traefik-dashboard.service: "api@internal"
       # Require authentication for dashboard access

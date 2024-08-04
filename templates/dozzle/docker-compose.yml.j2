@@ -22,5 +22,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       traefik.enable: "true"
+      traefik.http.routers.dozzle.entrypoints: "https"
       traefik.http.routers.dozzle.rule: "Host(`{{ dozzle.hostname }}`)"
       traefik.http.services.dozzle.loadbalancer.server.port: "8080"

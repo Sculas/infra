@@ -28,9 +28,13 @@
   tasks:
     - name: Configure Docker.
       ansible.builtin.import_tasks: tasks/docker.yml
+    - name: Configure Cloudflare DNS.
+      ansible.builtin.import_tasks: tasks/cloudflare.yml
     - name: Set up Traefik.
       ansible.builtin.import_tasks: tasks/traefikproxy.yml
     - name: Set up AdGuard Home.
       ansible.builtin.import_tasks: tasks/adguardhome.yml
     - name: Set up Dozzle.
       ansible.builtin.import_tasks: tasks/dozzle.yml
+    - name: Set up Jellyfin.
+      ansible.builtin.import_tasks: tasks/jellyfin.yml

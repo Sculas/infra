@@ -3,6 +3,7 @@
 http:
   routers:
     truenas:
+      entrypoints: https
       rule: "Host(`{{ truenas.hostname }}`)"
       service: truenas
 
@@ -26,6 +27,8 @@ http:
         customFrameOptionsValue: SAMEORIGIN
         customRequestHeaders:
           X-Forwarded-Proto: https
+        customResponseHeaders:
+          X-Robots-Tag: noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
 
     default-whitelist:
       ipAllowList:

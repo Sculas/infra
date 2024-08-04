@@ -18,6 +18,14 @@
     restarted: true
   when: not dozzle_running.changed
 
+- name: Restart Jellyfin
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ jellyfin.datadir }}"
+    state: present
+    restarted: true
+  when: not jellyfin_running.changed
+
 # ----------------------------------------------------------------------
 
 # AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.

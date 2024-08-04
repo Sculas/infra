@@ -1,0 +1,23 @@
+---
+- name: Retrieve external IP of system
+  community.general.ipify_facts:
+
+- name: Ensure external hostname DNS is present
+  register: _record
+  community.general.cloudflare_dns:
+    state: present
+    zone: "{{ cloudflare_zone }}"
+    record: "*.{{ external_hostname }}"
+    type: A
+    value: "{{ ipify_public_ip }}"
+    proxied: true
+    api_token: "{{ cloudflare_dns_token }}"
+
+- name: Determine if DNS record was changed
+  when: _record.changed # noqa: no-handler
+  block:
+    - name: Notify of record change
+      ansible.builtin.debug:
+        msg: "Cloudflare DNS record updated. Please adjust the cache rules as described in the README!"
+    - name: End play
+      ansible.builtin.meta: end_play

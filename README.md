@@ -44,12 +44,25 @@ You must do initial bootstrapping yourself by enabling SSH and adding your SSH k
 Make sure to enable the Docker daemon as well using [this hack](https://gist.github.com/tprelog/7988dc6b196775f33929beb19f0090d7).
 You might have to add your user account to the `docker` group via the TrueNAS Web UI.
 Change the web UI port from `80` to `81` and `443` to `444`. This is what Traefik expects and requires.
+In the Network tab, set the DNS servers to `1.1.1.1` and `1.0.0.1`. If the local DNS server goes down, we shouldn't deadlock ourselves.
+In your router, add the following port mappings: `80 (external) -> 8080 (internal)`, `443 (external) -> 8443 (internal)`
 
 **Ensure you have Ansible installed first**, you can find the instructions [here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
 1. Install the required roles: `ansible-galaxy install -r requirements.yml --force`
 2. Add the vault password to `.vault_password`, you might have to create it.
 3. Run the playbook: `ansible-playbook main.yml`
+
+Running the playbook for the first time will exit quickly, telling you to adjust the cache rules.
+This is because you are not allowed to cache videos (e.g. Jellyfin) without Cloudflare Streams.
+To fix this, **add a cache rule** to the zone with the following information:
+
+- **Rule name:** `Bypass cache for homelab`
+- **When incoming requests match:** `All incoming requests`
+- **Cache eligibility:** `Bypass cache`
+
+Then **deploy** the rule. This proxies the requests on the edge without using the CDN, which would otherwise be a violation of the [Terms of Service](https://blog.cloudflare.com/updated-tos).\
+This disables the CDN on the **entire zone**. Feel free to adjust the rule so it only applies to the required services (such as Jellyfin).
 
 ## Development
 Install the required roles as mentioned above and run `pnpm install` to install the Git pre-commit hooks.

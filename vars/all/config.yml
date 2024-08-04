@@ -5,14 +5,8 @@ docker_network: homelab
 
 # Mounting points
 mounts:
-  storage: &storage "/mnt/bakkie-nasi"
+  storage: "/mnt/bakkie-nasi"
   appdata: "/mnt/bakkie-bami"
-  media:
-    - *storage
-    - "/Muziek"
-  download:
-    - *storage
-    - "/Download"
 
 # TrueNAS configuration
 truenas:
@@ -37,3 +31,10 @@ dozzle:
   image: amir20/dozzle:latest
   hostname: "docker.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/dozzle"
+
+# Jellyfin configuration
+jellyfin:
+  image: jellyfin/jellyfin:latest
+  hostname: "jf.{{ external_hostname }}"
+  datadir: "{{ mounts.appdata }}/jellyfin"
+  mediadir: "{{ mounts.storage }}/Muziek"

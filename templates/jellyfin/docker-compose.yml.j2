@@ -1,0 +1,33 @@
+# {{ ansible_managed }}
+---
+version: "2.4" # v3 doesn't support group_add until Docker 1.27.0
+
+networks:
+  {{ docker_network }}:
+    external: true
+
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: {{ jellyfin.image }}
+    restart: unless-stopped
+    hostname: "{{ jellyfin.hostname }}"
+    networks:
+      - {{ docker_network }}
+    # Hardware acceleration - start
+    group_add:
+      - "107"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    # Hardware acceleration - end
+    environment:
+      TZ: "{{ docker_tz }}"
+    volumes:
+      - {{ jellyfin.datadir }}/config:/config
+      - {{ jellyfin.datadir }}/cache:/cache
+      - {{ jellyfin.mediadir }}:/media
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jellyfin.entrypoints: "https-external"
+      traefik.http.routers.jellyfin.rule: "Host(`{{ jellyfin.hostname }}`)"
+      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"

@@ -1,0 +1,22 @@
+---
+- name: Create Jellyfin data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ jellyfin.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Jellyfin template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/jellyfin/docker-compose.yml.j2"
+    dest: "{{ jellyfin.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Jellyfin
+
+- name: Ensure Jellyfin is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ jellyfin.datadir }}"
+    state: present
+  register: jellyfin_running
