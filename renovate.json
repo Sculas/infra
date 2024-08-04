@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "docker:pinDigests"],
+  "extends": ["config:recommended", "schedule:daily", "docker:pinDigests"],
+  "dependencyDashboard": true,
   "docker-compose": {
     "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml(?:.j2)?$"]
   }
