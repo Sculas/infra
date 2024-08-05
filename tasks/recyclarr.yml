@@ -1,0 +1,38 @@
+---
+- name: Create Recyclarr data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ recyclarr.datadir }}/config" # also ensures datadir exists
+    state: directory
+    mode: "755"
+
+- name: Transfer Recyclarr template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/recyclarr/{{ item.src }}"
+    dest: "{{ recyclarr.datadir }}/{{ item.dest }}"
+    mode: "640"
+  loop:
+    - src: docker-compose.yml.j2
+      dest: docker-compose.yml
+    - src: recyclarr.yml.j2
+      dest: config/recyclarr.yml
+  notify: Restart Recyclarr
+
+# Recyclarr forces itself to run as 1000:1000 and needs the correct permissions to do so.
+# See https://github.com/recyclarr/recyclarr/issues/289 for more information.
+- name: Ensure Recyclarr config has the right permissions.
+  become: true
+  ansible.builtin.file:
+    path: "{{ recyclarr.datadir }}/config"
+    state: directory
+    recurse: yes
+    owner: 1000
+    group: 1000
+
+- name: Ensure Recyclarr is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ recyclarr.datadir }}"
+    state: present
+  register: recyclarr_running

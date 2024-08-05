@@ -42,3 +42,5 @@
       ansible.builtin.import_tasks: tasks/sonarr.yml
     - name: Set up Radarr.
       ansible.builtin.import_tasks: tasks/radarr.yml
+    - name: Set up Recyclarr.
+      ansible.builtin.import_tasks: tasks/recyclarr.yml

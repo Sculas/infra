@@ -42,6 +42,14 @@
     restarted: true
   when: not radarr_running.changed
 
+- name: Restart Recyclarr
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ recyclarr.datadir }}"
+    state: present
+    restarted: true
+  when: not recyclarr_running.changed
+
 # ----------------------------------------------------------------------
 
 # AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.

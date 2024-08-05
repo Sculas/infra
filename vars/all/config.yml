@@ -47,3 +47,8 @@ radarr:
   hostname: "radarr.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/radarr"
   mediadir: "{{ mounts.media }}"
+
+# Recyclarr configuration
+recyclarr:
+  hostname: "recyclarr.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/recyclarr"
