@@ -6,11 +6,19 @@
     state: directory
     mode: "755"
 
-- name: Transfer Jellyfin template files.
+- name: Transfer Jellyfin docker-compose template.
   become: true
   ansible.builtin.template:
     src: "templates/jellyfin/docker-compose.yml.j2"
     dest: "{{ jellyfin.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Jellyfin
+
+- name: Transfer Jellyfin network configuration.
+  become: true
+  ansible.builtin.copy:
+    src: "templates/jellyfin/network.xml"
+    dest: "{{ jellyfin.datadir }}/config/config/network.xml"
     mode: "640"
   notify: Restart Jellyfin
 

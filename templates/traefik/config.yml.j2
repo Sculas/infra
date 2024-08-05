@@ -30,16 +30,21 @@ http:
         customResponseHeaders:
           X-Robots-Tag: noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
 
+    cloudflarewarp:
+      plugin:
+        cloudflarewarp:
+          disableDefault: false
+
     default-whitelist:
       ipAllowList:
         sourceRange:
-        - "192.168.0.0/16"
-        - "172.16.0.0/12"
+          - "192.168.0.0/16"
+          - "172.16.0.0/12"
 
     secured:
       chain:
         middlewares:
-        - default-whitelist
+          - default-whitelist
 
 tls:
   options:

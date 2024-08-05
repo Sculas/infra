@@ -45,6 +45,9 @@ entryPoints:
         - 2c0f:f248::/32
         # End of Cloudlare public IP list
     http:
+      middlewares:
+        - default-headers@file
+        - cloudflarewarp@file
       redirections:
         entryPoint:
           to: https-external
@@ -67,11 +70,18 @@ entryPoints:
     http:
       middlewares:
         - default-headers@file
+        - cloudflarewarp@file
       tls:
         certresolver: cloudflare
         domains:
           - main: "{{ external_hostname }}"
             sans: "*.{{ external_hostname }}"
+
+experimental:
+  plugins:
+    cloudflarewarp:
+      modulename: github.com/BetterCorp/cloudflarewarp
+      version: v1.3.3
 
 serversTransport:
   insecureSkipVerify: true
