@@ -20,3 +20,16 @@
     project_src: "{{ sonarr.datadir }}"
     state: present
   register: sonarr_running
+
+- name: Ensure Sonarr is initialized.
+  ansible.builtin.wait_for:
+    path: "{{ sonarr.datadir }}/config/config.xml"
+    search_regex: "ApiKey"
+
+# This will later be used in the Recyclarr setup.
+- name: Retrieve Sonarr API key.
+  community.general.xml:
+    path: "{{ sonarr.datadir }}/config/config.xml"
+    xpath: "/Config/ApiKey"
+    content: text
+  register: sonarr_api_key
