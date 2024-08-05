@@ -41,3 +41,9 @@ sonarr:
   hostname: "sonarr.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/sonarr"
   mediadir: "{{ mounts.media }}"
+
+# Radarr configuration
+radarr:
+  hostname: "radarr.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/radarr"
+  mediadir: "{{ mounts.media }}"

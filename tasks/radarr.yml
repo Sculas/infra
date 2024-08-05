@@ -1,0 +1,35 @@
+---
+- name: Create Radarr data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ radarr.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Radarr template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/radarr/docker-compose.yml.j2"
+    dest: "{{ radarr.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Radarr
+
+- name: Ensure Radarr is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ radarr.datadir }}"
+    state: present
+  register: radarr_running
+
+- name: Ensure Radarr is initialized.
+  ansible.builtin.wait_for:
+    path: "{{ radarr.datadir }}/config/config.xml"
+    search_regex: "ApiKey"
+
+# This will later be used in the Recyclarr setup.
+- name: Retrieve Radarr API key.
+  community.general.xml:
+    path: "{{ radarr.datadir }}/config/config.xml"
+    xpath: "/Config/ApiKey"
+    content: text
+  register: radarr_api_key

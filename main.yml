@@ -40,3 +40,5 @@
       ansible.builtin.import_tasks: tasks/jellyfin.yml
     - name: Set up Sonarr.
       ansible.builtin.import_tasks: tasks/sonarr.yml
+    - name: Set up Radarr.
+      ansible.builtin.import_tasks: tasks/radarr.yml

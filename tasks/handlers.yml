@@ -34,6 +34,14 @@
     restarted: true
   when: not sonarr_running.changed
 
+- name: Restart Radarr
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ radarr.datadir }}"
+    state: present
+    restarted: true
+  when: not radarr_running.changed
+
 # ----------------------------------------------------------------------
 
 # AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.

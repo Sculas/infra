@@ -1,0 +1,28 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+networks:
+  {{ docker_network }}:
+    external: true
+
+services:
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:develop@sha256:88a7777623a27cb7aa7af96129db654a4226238a2412be4976cabc9666674eb1
+    restart: unless-stopped
+    hostname: "{{ radarr.hostname }}"
+    networks:
+      - {{ docker_network }}
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "{{ docker_tz }}"
+    volumes:
+      - "{{ radarr.datadir }}/config:/config"
+      - "{{ radarr.mediadir }}:/media"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.radarr.entrypoints: "https"
+      traefik.http.routers.radarr.rule: "Host(`{{ radarr.hostname }}`)"
+      traefik.http.services.radarr.loadbalancer.server.port: "7878"
