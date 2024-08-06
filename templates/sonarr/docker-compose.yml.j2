@@ -9,7 +9,7 @@ networks:
 services:
   sonarr:
     container_name: sonarr
-    image: lscr.io/linuxserver/sonarr:develop@sha256:4e1e9e418249459273ca1d3d1d6e04a3776fddd614d5060e0ab598527f7dcaad
+    image: lscr.io/linuxserver/sonarr:4.0.8-develop@sha256:4e1e9e418249459273ca1d3d1d6e04a3776fddd614d5060e0ab598527f7dcaad
     restart: unless-stopped
     hostname: "{{ sonarr.hostname }}"
     networks:
