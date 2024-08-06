@@ -35,4 +35,6 @@
   register: xml_sonarr_api_key
 - name: Retrieve Sonarr API key for later.
   ansible.builtin.set_fact:
+    # We need the port because the hostname resolves to the container IP address.
+    sonarr_base_url: "http://{{ sonarr.hostname }}:8989"
     sonarr_api_key: "{{ xml_sonarr_api_key.matches[0].ApiKey }}"

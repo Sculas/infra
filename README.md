@@ -44,7 +44,8 @@ You must do initial bootstrapping yourself by enabling SSH and adding your SSH k
 Make sure to enable the Docker daemon as well using [this hack](https://gist.github.com/tprelog/7988dc6b196775f33929beb19f0090d7).
 You might have to add your user account to the `docker` group via the TrueNAS Web UI.
 Change the web UI port from `80` to `81` and `443` to `444`. This is what Traefik expects and requires.
-In the Network tab, set the DNS servers to `1.1.1.1` and `1.0.0.1`. If the local DNS server goes down, we shouldn't deadlock ourselves.
+In the Network tab, set the secondary DNS server to `1.1.1.1`. If the local DNS server goes down, we don't want to deadlock ourselves.
+Make sure the primary DNS server is still the local DNS server! Otherwise some tasks will fail that require DNS resolving to local services.
 In your router, add the following port mappings: `80 (external) -> 8080 (internal)`, `443 (external) -> 8443 (internal)`
 
 **Ensure you have Ansible installed first**, you can find the instructions [here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).

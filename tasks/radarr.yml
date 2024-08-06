@@ -35,4 +35,6 @@
   register: xml_radarr_api_key
 - name: Retrieve Radarr API key for later.
   ansible.builtin.set_fact:
+    # We need the port because the hostname resolves to the container IP address.
+    radarr_base_url: "http://{{ radarr.hostname }}:7878"
     radarr_api_key: "{{ xml_radarr_api_key.matches[0].ApiKey }}"

@@ -44,3 +44,5 @@
       ansible.builtin.import_tasks: tasks/radarr.yml
     - name: Set up Recyclarr.
       ansible.builtin.import_tasks: tasks/recyclarr.yml
+    - name: Set up Prowlarr.
+      ansible.builtin.import_tasks: tasks/prowlarr.yml

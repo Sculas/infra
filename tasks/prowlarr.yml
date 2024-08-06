@@ -1,0 +1,137 @@
+---
+- name: Create Prowlarr data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ prowlarr.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Prowlarr template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/prowlarr/docker-compose.yml.j2"
+    dest: "{{ prowlarr.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Prowlarr
+
+- name: Ensure Prowlarr is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ prowlarr.datadir }}"
+    state: present
+  register: prowlarr_running
+
+- name: Ensure Prowlarr is initialized.
+  ansible.builtin.wait_for:
+    path: "{{ prowlarr.datadir }}/config/config.xml"
+    search_regex: "ApiKey"
+
+# We'll need this to setup the applications next.
+- name: Read Prowlarr API key from config file.
+  community.general.xml:
+    path: "{{ prowlarr.datadir }}/config/config.xml"
+    xpath: "/Config/ApiKey"
+    content: text
+  register: xml_prowlarr_api_key
+- name: Retrieve Prowlarr API key.
+  ansible.builtin.set_fact:
+    # We need the port because the hostname resolves to the container IP address.
+    prowlarr_base_url: "http://{{ prowlarr.hostname }}:9696"
+    # Since this runs on the host, we don't need to specify any ports.
+    prowlarr_api_url: "https://{{ prowlarr.hostname }}"
+    prowlarr_api_key: "{{ xml_prowlarr_api_key.matches[0].ApiKey }}"
+
+- name: Retrieve existing Prowlarr applications.
+  ansible.builtin.uri:
+    url: "{{ prowlarr_api_url }}/api/v1/applications"
+    method: "GET"
+    body_format: "json"
+    return_content: true
+    status_code: 200
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+  register: prowlarr_applications_result
+
+- name: Determine if Sonarr is configured.
+  ansible.builtin.set_fact:
+    prowlarr_sonarr_settings:
+      syncLevel: fullSync
+      fields:
+        - name: prowlarrUrl
+          value: "{{ prowlarr_base_url }}"
+        - name: baseUrl
+          value: "{{ sonarr_base_url }}"
+        - name: apiKey
+          value: "{{ sonarr_api_key }}"
+      implementationName: Sonarr
+      implementation: Sonarr
+      configContract: SonarrSettings
+      tags: []
+      name: Sonarr
+    prowlarr_sonarr: "{{ prowlarr_applications_result.json | community.general.json_query(query) | first | default(None) }}"
+  vars:
+    query: "[?configContract == 'SonarrSettings'].{ id: id, baseUrl: fields[?name == 'baseUrl'].value | [0] }"
+
+- name: Determine if Radarr is configured.
+  ansible.builtin.set_fact:
+    prowlarr_radarr_settings:
+      syncLevel: fullSync
+      fields:
+        - name: prowlarrUrl
+          value: "{{ prowlarr_base_url }}"
+        - name: baseUrl
+          value: "{{ radarr_base_url }}"
+        - name: apiKey
+          value: "{{ radarr_api_key }}"
+      implementationName: Radarr
+      implementation: Radarr
+      configContract: RadarrSettings
+      tags: []
+      name: Radarr
+    prowlarr_radarr: "{{ prowlarr_applications_result.json | community.general.json_query(query) | first | default(None) }}"
+  vars:
+    query: "[?configContract == 'RadarrSettings'].{ id: id, baseUrl: fields[?name == 'baseUrl'].value | [0] }"
+
+# Setup Sonarr settings using POST or PUT.
+- name: Setup Sonarr settings for Prowlarr.
+  ansible.builtin.uri:
+    url: "{{ prowlarr_api_url }}/api/v1/applications"
+    method: "POST"
+    status_code: 201
+    body_format: json
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    body: "{{ prowlarr_sonarr_settings }}"
+  when: "prowlarr_sonarr == ''"
+- name: Update Sonarr settings for Prowlarr.
+  ansible.builtin.uri:
+    url: "{{ prowlarr_api_url }}/api/v1/applications/{{ prowlarr_sonarr.id }}"
+    method: "PUT"
+    status_code: 202
+    body_format: json
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    body: "{{ prowlarr_sonarr_settings | combine({'id': prowlarr_sonarr.id}) }}"
+  when: "prowlarr_sonarr != '' and prowlarr_sonarr.baseUrl != sonarr_base_url"
+
+# Setup Radarr settings using POST or PUT.
+- name: Setup Radarr settings for Prowlarr.
+  ansible.builtin.uri:
+    url: "{{ prowlarr_api_url }}/api/v1/applications"
+    method: "POST"
+    status_code: 201
+    body_format: json
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    body: "{{ prowlarr_radarr_settings }}"
+  when: "prowlarr_radarr == ''"
+- name: Update Radarr settings for Prowlarr.
+  ansible.builtin.uri:
+    url: "{{ prowlarr_api_url }}/api/v1/applications/{{ prowlarr_radarr.id }}"
+    method: "PUT"
+    status_code: 202
+    body_format: json
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    body: "{{ prowlarr_radarr_settings | combine({'id': prowlarr_radarr.id}) }}"
+  when: "prowlarr_radarr != '' and prowlarr_radarr.baseUrl != radarr_base_url"

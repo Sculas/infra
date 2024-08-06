@@ -50,6 +50,14 @@
     restarted: true
   when: not recyclarr_running.changed
 
+- name: Restart Prowlarr
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ prowlarr.datadir }}"
+    state: present
+    restarted: true
+  when: not prowlarr_running.changed
+
 # ----------------------------------------------------------------------
 
 # AdGuard Home must ALWAYS be last! Otherwise DNS will break during execution.

@@ -26,7 +26,7 @@
   ansible.builtin.file:
     path: "{{ recyclarr.datadir }}/config"
     state: directory
-    recurse: yes
+    recurse: true
     owner: 1000
     group: 1000
 

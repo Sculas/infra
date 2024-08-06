@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+networks:
+  {{ docker_network }}:
+    external: true
+
+services:
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:1.21.2@sha256:7fe57565907f4f776d43c15b2e020a0e4a62fe1e04e80e25b85a3ae4ca49e5d0
+    restart: unless-stopped
+    hostname: "{{ prowlarr.hostname }}"
+    networks:
+      - {{ docker_network }}
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "{{ docker_tz }}"
+    volumes:
+      - "{{ prowlarr.datadir }}/config:/config"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.entrypoints: "https"
+      traefik.http.routers.prowlarr.rule: "Host(`{{ prowlarr.hostname }}`)"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"

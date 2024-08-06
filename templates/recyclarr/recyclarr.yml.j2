@@ -2,7 +2,7 @@
 ---
 sonarr:
   anime-sonarr:
-    base_url: "http://{{ sonarr.hostname }}:8989"
+    base_url: "{{ sonarr_base_url }}"
     api_key: "{{ sonarr_api_key }}"
 
     include:
@@ -34,7 +34,7 @@ sonarr:
 
 radarr:
   anime-radarr:
-    base_url: "http://{{ radarr.hostname }}:7878"
+    base_url: "{{ radarr_base_url }}"
     api_key: "{{ radarr_api_key }}"
 
     include:
