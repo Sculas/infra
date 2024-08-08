@@ -51,6 +51,10 @@
     headers:
       X-Api-Key: "{{ prowlarr_api_key }}"
   register: prowlarr_applications_result
+  # Traefik might not have discovered the container yet.
+  until: prowlarr_applications_result.status == 200
+  retries: 24 # Retries for 24 * 5 seconds = 120 seconds = 2 minutes
+  delay: 5 # Every 5 seconds
 
 - name: Determine if Sonarr is configured.
   ansible.builtin.set_fact:
