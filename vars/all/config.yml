@@ -57,3 +57,9 @@ recyclarr:
 prowlarr:
   hostname: "prowlarr.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/prowlarr"
+
+# UpSnap configuration
+upsnap:
+  hostname: "wol.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/upsnap"
+  webui_port: "8090"

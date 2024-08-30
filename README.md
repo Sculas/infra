@@ -27,6 +27,7 @@ These are the services I run and use, which are also setup by this Ansible playb
 | [Traefik](https://traefik.io/traefik)                      | Application reverse proxy                                           |
 | [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome) | Network-wide ads & trackers blocking DNS server                     |
 | [Dozzle](https://dozzle.dev)                               | Container inspection with literally the best UI                     |
+| [UpSnap](https://github.com/seriousm4x/UpSnap)             | Wake on LAN web application                                         |
 | [Sonarr](https://sonarr.tv)                                | Automated TV show management                                        |
 | [Radarr](https://radarr.video)                             | Automated movie management                                          |
 | [Lidarr](https://lidarr.audio)                             | Automated music management                                          |

@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+services:
+  upsnap:
+    container_name: upsnap
+    image: ghcr.io/seriousm4x/upsnap:4.2.12@sha256:cb35f054c63556e448d5786119a6e8c4173edcaefa40836e7599645fbc8be3b2
+    restart: unless-stopped
+    hostname: "{{ upsnap.hostname }}"
+    network_mode: host # UpSnap needs this to send UDP broadcast packets.
+    # Using the Docker gateway so this service can only be accessed from other containers.
+    entrypoint: /bin/sh -c "./upsnap serve --http host.docker.internal:{{ upsnap.webui_port }}"
+    healthcheck:
+      test: curl -fs "http://host.docker.internal:{{ upsnap.webui_port }}/api/health" || exit 1
+      interval: 10s
+    environment:
+      TZ: "{{ docker_tz }}"
+    volumes:
+      - "{{ upsnap.datadir }}/data:/app/pb_data"
+    # Traefik for this service is configured in the dynamic configuration!
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -6,12 +6,21 @@ http:
       entrypoints: https
       rule: "Host(`{{ truenas.hostname }}`)"
       service: truenas
+    upsnap:
+      entrypoints: https
+      rule: "Host(`{{ upsnap.hostname }}`)"
+      service: upsnap
 
   services:
     truenas:
       loadBalancer:
         servers:
           - url: "http://host.docker.internal:{{ truenas.webui_port }}"
+        passHostHeader: true
+    upsnap:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:{{ upsnap.webui_port }}"
         passHostHeader: true
 
   middlewares:
