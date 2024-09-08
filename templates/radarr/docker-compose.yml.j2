@@ -9,7 +9,7 @@ networks:
 services:
   radarr:
     container_name: radarr
-    image: lscr.io/linuxserver/radarr:5.8.3-develop@sha256:88a7777623a27cb7aa7af96129db654a4226238a2412be4976cabc9666674eb1
+    image: lscr.io/linuxserver/radarr:5.10.2-develop@sha256:c72baae8d4bf870392591d485000bd28ea75d39964da18fae9799c1a0802409d
     restart: unless-stopped
     hostname: "{{ radarr.hostname }}"
     networks:
