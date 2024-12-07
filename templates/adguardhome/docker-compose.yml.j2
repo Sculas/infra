@@ -3,7 +3,7 @@
 version: "3"
 
 networks:
-  {{ docker_network }}:
+  "{{ docker_network }}":
     external: true
 
 services:
@@ -15,7 +15,7 @@ services:
       - NET_ADMIN
     hostname: "{{ adguardhome.hostname }}"
     networks:
-      - {{ docker_network }}
+      - "{{ docker_network }}"
     ports:
       - "53:53/tcp"
       - "53:53/udp"

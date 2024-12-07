@@ -3,7 +3,7 @@
 version: "3"
 
 networks:
-  {{ docker_network }}:
+  "{{ docker_network }}":
     external: true
 
 services:
@@ -14,7 +14,7 @@ services:
     hostname: "{{ recyclarr.hostname }}"
     user: 1000:1000
     networks:
-      - {{ docker_network }}
+      - "{{ docker_network }}"
     environment:
       TZ: "{{ docker_tz }}"
     volumes:

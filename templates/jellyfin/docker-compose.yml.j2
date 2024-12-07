@@ -3,7 +3,7 @@
 version: "2.4" # v3 doesn't support group_add until Docker 1.27.0
 
 networks:
-  {{ docker_network }}:
+  "{{ docker_network }}":
     external: true
 
 services:
@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     hostname: "{{ jellyfin.hostname }}"
     networks:
-      - {{ docker_network }}
+      - "{{ docker_network }}"
     # Hardware acceleration - start
     group_add:
       - "107"

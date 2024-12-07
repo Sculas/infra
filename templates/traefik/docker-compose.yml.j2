@@ -3,7 +3,7 @@
 version: "3"
 
 networks:
-  {{ docker_network }}:
+  "{{ docker_network }}":
     external: true
 
 services:
@@ -15,7 +15,7 @@ services:
       - no-new-privileges:true
     hostname: "{{ traefik.hostname }}"
     networks:
-      - {{ docker_network }}
+      - "{{ docker_network }}"
     ports:
       # Internal endpoints
       - "80:80"

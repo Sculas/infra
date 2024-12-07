@@ -3,7 +3,7 @@
 version: "3"
 
 networks:
-  {{ docker_network }}:
+  "{{ docker_network }}":
     external: true
 
 services:
@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     hostname: "{{ radarr.hostname }}"
     networks:
-      - {{ docker_network }}
+      - "{{ docker_network }}"
     environment:
       PUID: "1000"
       PGID: "1000"
