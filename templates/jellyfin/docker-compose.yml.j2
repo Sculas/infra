@@ -9,7 +9,7 @@ networks:
 services:
   jellyfin:
     container_name: jellyfin
-    image: jellyfin/jellyfin:10.9.9@sha256:d6f3d4aa59438ce951d85669f3c22426d20edb7a6b97604c509b5f4825bc8294
+    image: jellyfin/jellyfin:10.10.3@sha256:17c3a8d9dddb97789b5f37112840ebf96566442c14d4754193a6c2eb154bc221
     restart: unless-stopped
     hostname: "{{ jellyfin.hostname }}"
     networks:

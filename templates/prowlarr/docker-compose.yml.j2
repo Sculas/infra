@@ -9,7 +9,7 @@ networks:
 services:
   prowlarr:
     container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:1.21.2@sha256:c80a2dcfefd85c62da2373c5bf0138bb9d1c647c4b3d8f994ce263f5e8b1db81
+    image: lscr.io/linuxserver/prowlarr:1.27.0@sha256:6b4ce037964e4bf50d341bc9b3aa800238d46ff7de4d7ecc029280c4bb5b2e68
     restart: unless-stopped
     hostname: "{{ prowlarr.hostname }}"
     networks:
