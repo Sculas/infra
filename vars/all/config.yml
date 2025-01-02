@@ -36,6 +36,11 @@ jellyfin:
   datadir: "{{ mounts.appdata }}/jellyfin"
   mediadir: "{{ mounts.media }}"
 
+# Jellyseerr configuration
+jellyseerr:
+  hostname: "jfr.{{ external_hostname }}"
+  datadir: "{{ mounts.appdata }}/jellyseerr"
+
 # Sonarr configuration
 sonarr:
   hostname: "sonarr.{{ internal_hostname }}"

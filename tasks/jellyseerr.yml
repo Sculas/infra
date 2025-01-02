@@ -1,0 +1,22 @@
+---
+- name: Create Jellyseerr data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ jellyseerr.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer Jellyseerr template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/jellyseerr/docker-compose.yml.j2"
+    dest: "{{ jellyseerr.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart Jellyseerr
+
+- name: Ensure Jellyseerr is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ jellyseerr.datadir }}"
+    state: present
+  register: jellyseerr_running

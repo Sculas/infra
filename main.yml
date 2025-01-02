@@ -48,3 +48,5 @@
       ansible.builtin.import_tasks: tasks/recyclarr.yml
     - name: Set up Prowlarr.
       ansible.builtin.import_tasks: tasks/prowlarr.yml
+    - name: Set up Jellyseerr.
+      ansible.builtin.import_tasks: tasks/jellyseerr.yml
