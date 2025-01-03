@@ -26,3 +26,29 @@ services:
       traefik.http.routers.rdt.entrypoints: "https"
       traefik.http.routers.rdt.rule: "Host(`{{ rdt.hostname }}`)"
       traefik.http.services.rdt.loadbalancer.server.port: "6500"
+
+  rdt-aria2:
+    container_name: rdt-aria2
+    image: hurlenko/aria2-ariang:1.3.8@sha256:468b1b636b15136650d5da218ca377a563fce6d8a654c146a88418ade34cc6f0
+    restart: unless-stopped
+    hostname: "{{ rdt.aria2_hostname }}"
+    networks:
+      - "{{ docker_network }}"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      UMASK: 002
+      TZ: "{{ docker_tz }}"
+      ARIA2RPCPORT: 443
+    volumes:
+      - "{{ rdt.datadir }}/aria2:/aria2/conf"
+      - "{{ rdt.mediadir }}/Downloads:/media/Downloads"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.rdt-aria2.entrypoints: "https"
+      traefik.http.routers.rdt-aria2.rule: "Host(`{{ rdt.aria2_hostname }}`)"
+      traefik.http.services.rdt-aria2.loadbalancer.server.port: "8080"
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m

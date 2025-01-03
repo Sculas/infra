@@ -68,6 +68,7 @@ rdt:
   hostname: "rdt.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/rdt"
   mediadir: "{{ mounts.media }}"
+  aria2_hostname: "aria.{{ internal_hostname }}"
 
 # UpSnap configuration
 upsnap:
