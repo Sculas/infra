@@ -34,6 +34,14 @@
     restarted: true
   when: not jellyfin_running.changed
 
+- name: Restart rdt-client
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ rdt.datadir }}"
+    state: present
+    restarted: true
+  when: not rdt_running.changed
+
 - name: Restart Sonarr
   become: true
   community.docker.docker_compose:

@@ -1,0 +1,28 @@
+---
+version: "3"
+
+networks:
+  "{{ docker_network }}":
+    external: true
+
+services:
+  rdt:
+    container_name: rdt
+    image: rogerfar/rdtclient:2.0.92@sha256:e5785272785a7c6aeebe83442f448160adb846e7e7fee2c60624bc85b82e5e54
+    restart: unless-stopped
+    hostname: "{{ rdt.hostname }}"
+    networks:
+      - "{{ docker_network }}"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      UMASK: 002
+      TZ: "{{ docker_tz }}"
+    volumes:
+      - "{{ rdt.datadir }}/data:/data/db"
+      - "{{ rdt.mediadir }}/Downloads:/media/Downloads"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.rdt.entrypoints: "https"
+      traefik.http.routers.rdt.rule: "Host(`{{ rdt.hostname }}`)"
+      traefik.http.services.rdt.loadbalancer.server.port: "6500"

@@ -63,6 +63,12 @@ prowlarr:
   hostname: "prowlarr.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/prowlarr"
 
+# Debrid torrent client configuration
+rdt:
+  hostname: "rdt.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/rdt"
+  mediadir: "{{ mounts.media }}"
+
 # UpSnap configuration
 upsnap:
   hostname: "wol.{{ internal_hostname }}"

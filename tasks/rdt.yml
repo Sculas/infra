@@ -1,0 +1,22 @@
+---
+- name: Create rdt-client data directories.
+  become: true
+  ansible.builtin.file:
+    path: "{{ rdt.datadir }}"
+    state: directory
+    mode: "755"
+
+- name: Transfer rdt-client template files.
+  become: true
+  ansible.builtin.template:
+    src: "templates/rdt/docker-compose.yml.j2"
+    dest: "{{ rdt.datadir }}/docker-compose.yml"
+    mode: "640"
+  notify: Restart rdt-client
+
+- name: Ensure rdt-client is running.
+  become: true
+  community.docker.docker_compose:
+    project_src: "{{ rdt.datadir }}"
+    state: present
+  register: rdt_running
