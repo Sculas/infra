@@ -4,7 +4,7 @@ version: "3"
 services:
   upsnap:
     container_name: upsnap
-    image: ghcr.io/seriousm4x/upsnap:4.4.2@sha256:3a8497117d2f05745aecb250eb4ba578278fc2a75b558d551efc5f5b241a923b
+    image: ghcr.io/seriousm4x/upsnap:4.5.0@sha256:8a99612728deb227a9b677b193acb4cb5e59e09fa7871287ef28090c03778e1a
     restart: unless-stopped
     hostname: "{{ upsnap.hostname }}"
     network_mode: host # UpSnap needs this to send UDP broadcast packets.
