@@ -8,7 +8,7 @@ networks:
 services:
   rdt:
     container_name: rdt
-    image: rogerfar/rdtclient:2.0.96@sha256:f27d525b033c011fee1e4d5e65f72f51643f38c2e5ce47985e2ddf243fb4a233
+    image: rogerfar/rdtclient:2.0.102@sha256:26e36edca66cecabfc81db87744e6b83d549073707003967a2a89baffc50c16b
     restart: unless-stopped
     hostname: "{{ rdt.hostname }}"
     networks:
