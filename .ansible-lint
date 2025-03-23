@@ -1,4 +1,4 @@
 ---
 exclude_paths:
   - .vscode/
-  - vault.yml
+  - vault.yaml

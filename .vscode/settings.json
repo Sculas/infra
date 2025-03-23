@@ -1,4 +1,4 @@
 {
   "ansible.python.interpreterPath": "/bin/python3",
-  "conventionalCommits.scopes": ["tasks/prowlarr"]
+  "files.associations": { "*.yml": "ansible" }
 }

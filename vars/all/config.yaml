@@ -1,0 +1,57 @@
+---
+# Docker configuration
+docker_tz: Europe/Amsterdam
+docker_network: homelab
+
+# Mounting points
+mounts:
+  appdata: "/opt/docker"
+
+# Proxmox configuration
+proxmox:
+  hostname: "pve.{{ internal_hostname }}"
+  webui_port: "8006"
+
+# TrueNAS configuration
+truenas:
+  hostname: "truenas.{{ internal_hostname }}"
+  webui_port: "81"
+
+# Jellyfin configuration
+jellyfin:
+  hostname: "jfnew.{{ external_hostname }}"
+  webui_port: "8096"
+
+# AdGuard Home configuration
+adguardhome:
+  hostname: "adguard.{{ internal_hostname }}"
+  webui_port: "10000"
+
+# Traefik configuration
+traefik:
+  hostname: "traefik.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/traefik"
+
+# Dozzle configuration
+dozzle:
+  hostname: "docker.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/dozzle"
+
+# UpSnap configuration
+upsnap:
+  hostname: "wol.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/upsnap"
+  webui_port: "8090"
+
+# Prowlarr configuration
+prowlarr:
+  hostname: "prowlarr.{{ internal_hostname }}"
+  datadir: "{{ mounts.appdata }}/prowlarr"
+
+# Temporary to aid in switch to new server (TODO: remove)
+jellyfintemp:
+  hostname: "jf.{{ external_hostname }}"
+  webui_port: "8096"
+sonarrtemp:
+  hostname: "sonarr.{{ internal_hostname }}"
+  webui_port: "8989"

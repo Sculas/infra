@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 networks:
   "{{ docker_network }}":
     external: true
@@ -8,9 +6,9 @@ networks:
 services:
   dozzle:
     container_name: dozzle
-    image: amir20/dozzle:v8.11.1@sha256:cc6060ef301cf937db5f76922713c72b325130d68d9d6571211d6c047c427027
+    image: amir20/dozzle:v8.11.9@sha256:b840926bc5f63be2296d3c99cf7c17a522d631b6afa7fce3fc744d65a1cb92f9
     restart: unless-stopped
-    hostname: "{{ dozzle.hostname }}"
+    hostname: "dozzle.docker.local"
     networks:
       - "{{ docker_network }}"
     environment:

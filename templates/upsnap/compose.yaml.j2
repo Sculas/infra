@@ -1,12 +1,10 @@
 ---
-version: "3"
-
 services:
   upsnap:
     container_name: upsnap
-    image: ghcr.io/seriousm4x/upsnap:4.6.1@sha256:036f8be0712ed4cc607c1852ad4afa3bae4e4c9df83415bdfab8d981a8183044
+    image: ghcr.io/seriousm4x/upsnap:5.0.3@sha256:bd38596f60d29977b1253a2c815695250abb1a67b54fd58f9898a009f2f24562
     restart: unless-stopped
-    hostname: "{{ upsnap.hostname }}"
+    hostname: "upsnap.docker.local"
     network_mode: host # UpSnap needs this to send UDP broadcast packets.
     # Using the Docker gateway so this service can only be accessed from other containers.
     entrypoint: /bin/sh -c "./upsnap serve --http host.docker.internal:{{ upsnap.webui_port }}"

@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 networks:
   "{{ docker_network }}":
     external: true
@@ -8,11 +6,11 @@ networks:
 services:
   traefik:
     container_name: traefik
-    image: traefik:v3.3.3@sha256:f1fdee7fda041872cff24e36a08f45ca53f006ded88f743a8e30e3d87ca52b48
+    image: traefik:v3.3.4@sha256:cc11989f418e2cfe5e60fc40c92c1813be847f58eda15eced7d5ac890255ad9e
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    hostname: "{{ traefik.hostname }}"
+    hostname: "traefik.docker.local"
     networks:
       - "{{ docker_network }}"
     ports:
@@ -24,14 +22,12 @@ services:
       - "8080:8080"
       - "8443:8443/tcp"
       - "8443:8443/udp"
-    # This is so Traefik can proxy the TrueNAS Web UI
     extra_hosts:
+      # Allow Traefik to proxy the UpSnap (which runs in host mode for UDP).
       - "host.docker.internal:host-gateway"
     environment:
       TZ: "{{ docker_tz }}"
-      # Email of your Cloudflare account
       CF_API_EMAIL: "{{ cloudflare_email }}"
-      # User API token with Zone:Read and DNS:Edit permissions
       CF_DNS_API_TOKEN: "{{ cloudflare_dns_token }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"

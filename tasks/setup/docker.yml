@@ -1,0 +1,7 @@
+---
+- name: Install the requests Python package.
+  ansible.builtin.pip:
+    name: requests
+- name: Ensure Docker network exists.
+  community.docker.docker_network:
+    name: "{{ docker_network }}"

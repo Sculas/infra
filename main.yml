@@ -2,13 +2,14 @@
 - name: "Running playbook"
   hosts: all
   serial: 1
-
-  roles:
-    - role: mitre.yedit
+  become: true
 
   vars_files:
-    - vars/all/config.yml
-    - vars/all/vault.yml
+    - vars/all/config.yaml
+    - vars/all/vault.yaml
+
+  roles:
+    - geerlingguy.docker
 
   pre_tasks:
     - name: Check if user mode works.
@@ -22,33 +23,21 @@
         msg: "become mode ok"
 
   handlers:
-    - name: Include handlers.
-      ansible.builtin.import_tasks: tasks/handlers.yml
+    - name: Include pre-stage handlers.
+      ansible.builtin.import_tasks: tasks/handlers/pre.yml
+    - name: Include run-stage handlers.
+      ansible.builtin.import_tasks: tasks/handlers/run.yml
 
   tasks:
     - name: Configure Docker.
-      ansible.builtin.import_tasks: tasks/docker.yml
+      ansible.builtin.import_tasks: tasks/setup/docker.yml
     - name: Configure Cloudflare DNS.
-      ansible.builtin.import_tasks: tasks/cloudflare.yml
+      ansible.builtin.import_tasks: tasks/setup/cloudflare.yml
     - name: Set up Traefik.
-      ansible.builtin.import_tasks: tasks/traefikproxy.yml
-    - name: Set up AdGuard Home.
-      ansible.builtin.import_tasks: tasks/adguardhome.yml
+      ansible.builtin.import_tasks: tasks/traefik.yml
     - name: Set up Dozzle.
       ansible.builtin.import_tasks: tasks/dozzle.yml
     - name: Set up UpSnap.
       ansible.builtin.import_tasks: tasks/upsnap.yml
-    - name: Set up Jellyfin.
-      ansible.builtin.import_tasks: tasks/jellyfin.yml
-    - name: Set up rdt-client.
-      ansible.builtin.import_tasks: tasks/rdt.yml
-    - name: Set up Sonarr.
-      ansible.builtin.import_tasks: tasks/sonarr.yml
-    - name: Set up Radarr.
-      ansible.builtin.import_tasks: tasks/radarr.yml
-    - name: Set up Recyclarr.
-      ansible.builtin.import_tasks: tasks/recyclarr.yml
     - name: Set up Prowlarr.
       ansible.builtin.import_tasks: tasks/prowlarr.yml
-    - name: Set up Jellyseerr.
-      ansible.builtin.import_tasks: tasks/jellyseerr.yml

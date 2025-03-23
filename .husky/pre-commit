@@ -1,6 +1,6 @@
 #!/bin/sh
 
-FILES_PATTERN='.*vault.*\.*$|digital_ocean\.ini|do_env\.sh'
+FILES_PATTERN='.*vault\.yaml$'
 REQUIRED='ANSIBLE_VAULT'
 
 EXIT_STATUS=0

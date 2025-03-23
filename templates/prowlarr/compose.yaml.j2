@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 networks:
   "{{ docker_network }}":
     external: true
@@ -8,9 +6,9 @@ networks:
 services:
   prowlarr:
     container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:1.30.2@sha256:8883bf1c8afdd45dfb8146041d944656efac01208ef44b7bbdd2aa8b0fbc1782
+    image: lscr.io/linuxserver/prowlarr:1.32.2@sha256:18e9801e4509e45873c1adb03adf0bf718743ff5147e19b4cdf7626f8bd2f752
     restart: unless-stopped
-    hostname: "{{ prowlarr.hostname }}"
+    hostname: "prowlarr.docker.local"
     networks:
       - "{{ docker_network }}"
     environment:

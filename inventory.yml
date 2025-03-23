@@ -1,12 +1,11 @@
 ---
 all:
   children:
-    nas:
+    home:
       hosts:
-        truenas:
-          ansible_host: "{{ truenas_ip }}"
-          ansible_port: "{{ truenas_port }}"
-          ansible_user: "{{ truenas_user }}"
-          ansible_ssh_private_key_file: "{{ truenas_ssh_key }}"
+        server:
+          ansible_host: "{{ server_addr }}"
+          ansible_user: "{{ server_user }}"
+          ansible_ssh_private_key_file: "{{ server_ssh_key }}"
           ansible_ssh_extra_args: "-o IdentitiesOnly=yes"
           ansible_python_interpreter: /bin/python3

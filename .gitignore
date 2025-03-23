@@ -1,5 +1,6 @@
 __pycache__/
 *.retry
 node_modules
+.ansible
 
 .vault_password

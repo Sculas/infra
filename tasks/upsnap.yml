@@ -1,22 +1,19 @@
 ---
 - name: Create UpSnap data directories.
-  become: true
   ansible.builtin.file:
     path: "{{ upsnap.datadir }}"
     state: directory
     mode: "755"
 
 - name: Transfer UpSnap template files.
-  become: true
   ansible.builtin.template:
-    src: "templates/upsnap/docker-compose.yml.j2"
-    dest: "{{ upsnap.datadir }}/docker-compose.yml"
+    src: "templates/upsnap/compose.yaml.j2"
+    dest: "{{ upsnap.datadir }}/compose.yaml"
     mode: "640"
   notify: Restart UpSnap
 
 - name: Ensure UpSnap is running.
-  become: true
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ upsnap.datadir }}"
     state: present
   register: upsnap_running

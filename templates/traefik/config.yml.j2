@@ -2,25 +2,72 @@
 ---
 http:
   routers:
+    proxmox:
+      entrypoints: https
+      rule: "Host(`{{ proxmox.hostname }}`)"
+      service: proxmox
     truenas:
       entrypoints: https
       rule: "Host(`{{ truenas.hostname }}`)"
       service: truenas
+    adguardhome:
+      entrypoints: https
+      rule: "Host(`{{ adguardhome.hostname }}`)"
+      service: adguardhome
     upsnap:
       entrypoints: https
       rule: "Host(`{{ upsnap.hostname }}`)"
       service: upsnap
+    jellyfin:
+      entrypoints: https-external
+      rule: "Host(`{{ jellyfin.hostname }}`)"
+      service: jellyfin
+    # temporary to aid in switch to new server (TODO: remove)
+    jellyfintemp:
+      entrypoints: https-external
+      rule: "Host(`{{ jellyfintemp.hostname }}`)"
+      service: jellyfintemp
+    sonarrtemp:
+      entrypoints: https
+      rule: "Host(`{{ sonarrtemp.hostname }}`)"
+      service: sonarrtemp
 
   services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://{{ ext_proxmox_addr }}:{{ proxmox.webui_port }}"
+        passHostHeader: true
     truenas:
       loadBalancer:
         servers:
-          - url: "http://host.docker.internal:{{ truenas.webui_port }}"
+          - url: "http://{{ ext_truenas_addr }}:{{ truenas.webui_port }}"
+        passHostHeader: true
+    adguardhome:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ext_adguard_addr }}:{{ adguardhome.webui_port }}"
         passHostHeader: true
     upsnap:
       loadBalancer:
         servers:
           - url: "http://host.docker.internal:{{ upsnap.webui_port }}"
+        passHostHeader: true
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ext_jellyfin_addr }}:{{ jellyfin.webui_port }}"
+        passHostHeader: true
+    # temporary to aid in switch to new server (TODO: remove)
+    jellyfintemp:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ext_truenas_addr }}:{{ jellyfintemp.webui_port }}"
+        passHostHeader: true
+    sonarrtemp:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ext_truenas_addr }}:{{ sonarrtemp.webui_port }}"
         passHostHeader: true
 
   middlewares:
