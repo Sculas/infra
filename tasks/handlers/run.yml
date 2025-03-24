@@ -16,3 +16,9 @@
     project_src: "{{ prowlarr.datadir }}"
     state: restarted
   when: not prowlarr_running.changed
+
+- name: Restart Jellyseerr
+  community.docker.docker_compose_v2:
+    project_src: "{{ jellyseerr.datadir }}"
+    state: restarted
+  when: not jellyseerr_running.changed

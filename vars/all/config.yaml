@@ -48,6 +48,11 @@ prowlarr:
   hostname: "prowlarr.{{ internal_hostname }}"
   datadir: "{{ mounts.appdata }}/prowlarr"
 
+# Jellyseerr configuration
+jellyseerr:
+  hostname: "jfr.{{ external_hostname }}"
+  datadir: "{{ mounts.appdata }}/jellyseerr"
+
 # Temporary to aid in switch to new server (TODO: remove)
 jellyfintemp:
   hostname: "jf.{{ external_hostname }}"
