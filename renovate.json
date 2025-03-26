@@ -5,9 +5,12 @@
     "schedule:daily",
     "docker:pinDigests",
     "docker:enableMajor",
-    ":automergeMinor"
+    ":automergePr",
+    ":automergeMinor",
+    "group:allNonMajor"
   ],
   "dependencyDashboard": true,
+  "ignoreTests": false,
   "docker-compose": {
     "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml(?:.j2)?$"]
   }
