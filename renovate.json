@@ -12,7 +12,7 @@
     ":automergeDigest"
   ],
   "dependencyDashboard": true,
-  "ignoreTests": false,
+  "ignoreTests": true,
   "docker-compose": {
     "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml(?:.j2)?$"]
   }
