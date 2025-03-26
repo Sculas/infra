@@ -5,9 +5,11 @@
     "schedule:daily",
     "docker:pinDigests",
     "docker:enableMajor",
+    "group:allNonMajor",
     ":automergePr",
     ":automergeMinor",
-    "group:allNonMajor"
+    ":automergePatch",
+    ":automergeDigest"
   ],
   "dependencyDashboard": true,
   "ignoreTests": false,
