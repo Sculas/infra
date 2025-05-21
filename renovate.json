@@ -5,7 +5,7 @@
     "schedule:daily",
     "docker:pinDigests",
     "docker:enableMajor",
-    "group:allNonMajor",
+    "group:all",
     ":automergePr",
     ":automergeMinor",
     ":automergePatch",
