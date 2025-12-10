@@ -9,7 +9,7 @@
     zone: "{{ cloudflare_zone }}"
     record: "*.{{ external_hostname }}"
     type: A
-    value: "{{ ipify_public_ip }}"
+    value: "{{ ansible_facts.ipify_public_ip }}"
     proxied: true
     api_token: "{{ cloudflare_dns_token }}"
 

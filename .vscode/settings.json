@@ -1,4 +1,5 @@
 {
   "ansible.python.interpreterPath": "/bin/python3",
-  "files.associations": { "*.yml": "ansible" }
+  "files.associations": { "*.yml": "ansible" },
+  "npm.packageManager": "bun"
 }
